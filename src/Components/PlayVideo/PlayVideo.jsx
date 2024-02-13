@@ -29,18 +29,50 @@ const PlayVideo = () => {
           </span>
         </div>
         <hr />
-        <div className="publisher">
-          <img src={jack} alt="" />
-          <div>
-            <p>DJ G400</p>
-            <span>4M Subscribers</span>
-          </div>
-          <button>Subscribe</button>
+      </div>
+      <div className="publisher">
+        <img src={jack} alt="" />
+        <div>
+          <p>DJ G400</p>
+          <span>4M Subscribers</span>
         </div>
-        <div className="vid-secription">
-          <p>Causing 400 problems for these copycat DJS</p>
-          <hr />
-          <h4>400 Comments</h4>
+        <button>Subscribe</button>
+      </div>
+      <div className="vid-decription">
+        <p>Causing 400 problems for these copycat DJS</p>
+        <hr />
+        <h4>400 Comments</h4>
+        <div className="comment">
+          <img src={user_profile} alt="" />
+          <div>
+            <h3>
+              Arap Trap <span>1 day ago</span>
+            </h3>
+            <p>
+              Give these DJs some uniform cause I'm taking them back to school
+            </p>
+            <div className="comment-action">
+              <img src={like} alt="" />
+              <span>440</span>
+              <img src={dislike} alt="" />
+            </div>
+          </div>
+        </div>
+        <div className="comment">
+          <img src={user_profile} alt="" />
+          <div>
+            <h3>
+              Arap Trap <span>1 day ago</span>
+            </h3>
+            <p>
+              Give these DJs some uniform cause I'm taking them back to school
+            </p>
+            <div className="comment-action">
+              <img src={like} alt="" />
+              <span>440</span>
+              <img src={dislike} alt="" />
+            </div>
+          </div>
         </div>
         <div className="comment">
           <img src={user_profile} alt="" />
