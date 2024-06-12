@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect , useState } from "react";
 import "./PlayVideo.css";
 import like from "../../assets/like.png";
 import dislike from "../../assets/dislike.png";
@@ -15,25 +15,37 @@ const PlayVideo = () => {
   const [commentData, setCommentData] = useState([]);
 
   const fetchVideoData = async () => {
-    // Fetching the video's data
-    const videoDetails_url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}=${API_KEY}`;
+    const videoDetails_url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}&key=${API_KEY}`;
     await fetch(videoDetails_url)
       .then((res) => res.json())
-      .then((data) => setApiData(data.items[0]));
+      .then((data) => {
+        if (data.items && data.items.length > 0) {
+          setApiData(data.items[0]);
+        }
+      })
+      .catch((error) => console.error('Error fetching video data:', error));
   };
 
   const fetchOtherData = async () => {
-    // Fetching the channel data
     const channelData_url = `https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}&key=${API_KEY}`;
     await fetch(channelData_url)
       .then((res) => res.json())
-      .then((data) => setChannelData(data.items));
+      .then((data) => {
+        if (data.items && data.items.length > 0) {
+          setChannelData(data.items[0]);
+        }
+      })
+      .catch((error) => console.error('Error fetching channel data:', error));
 
-    // Fetching the comment data
     const comment_url = `https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&maxResults=50&videoId=${videoId}&key=${API_KEY}`;
     await fetch(comment_url)
       .then((res) => res.json())
-      .then((data) => setCommentData(data.items[0]));
+      .then((data) => {
+        if (data.items) {
+          setCommentData(data.items);
+        }
+      })
+      .catch((error) => console.error('Error fetching comment data:', error));
   };
 
   useEffect(() => {
@@ -41,17 +53,18 @@ const PlayVideo = () => {
   }, [videoId]);
 
   useEffect(() => {
-    fetchOtherData();
+    if (apiData) {
+      fetchOtherData();
+    }
   }, [apiData]);
 
   return (
     <div className="play-video">
-      {/* <video src={video1} controls autoPlay muted loop></video> */}
       <iframe
         src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-        frameborder="0"
+        frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen
+        allowFullScreen
       ></iframe>
       <h3>{apiData ? apiData.snippet.title : "Title here"}</h3>
       <div className="play-video-info">
@@ -82,7 +95,7 @@ const PlayVideo = () => {
           alt=""
         />
         <div>
-          <p>{apiData ? apiData.snippet.channelTittle : "Channel Title"}</p>
+          <p>{apiData ? apiData.snippet.channelTitle : "Channel Title"}</p>
           <span>
             {channelData
               ? value_converter(channelData.statistics.subscriberCount)
@@ -92,7 +105,7 @@ const PlayVideo = () => {
         </div>
         <button>Subscribe</button>
       </div>
-      <div className="vid-decription">
+      <div className="vid-description">
         <p>
           {apiData
             ? apiData.snippet.description.slice(0, 250)
@@ -113,7 +126,7 @@ const PlayVideo = () => {
               <div>
                 <h3>
                   {item.snippet.topLevelComment.snippet.authorDisplayName}
-                  <span>1 day ago</span>
+                  <span>{moment(item.snippet.topLevelComment.snippet.publishedAt).fromNow()}</span>
                 </h3>
                 <p>{item.snippet.topLevelComment.snippet.textDisplay}</p>
                 <div className="comment-action">

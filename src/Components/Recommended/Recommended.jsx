@@ -21,8 +21,8 @@ const Recommended = ({ categoryId }) => {
     <div className="recommended">
       {apiData.map((item, index) => {
         return (
-          <Link to={`/video/${item.snippet.categoryId}/${item.id}`}>
-            <div key={index} className="side-video-list">
+          <Link key={index} to={`/video/${item.snippet.categoryId}/${item.id}`}>
+            <div className="side-video-list">
               <img src={item.snippet.thumbnails.medium.url} alt="" />
               <div className="vid-info">
                 <h4>{item.snippet.title}</h4>
